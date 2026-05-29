@@ -5,13 +5,18 @@ import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
   const { user, logout, refreshUser } = useAuth();
-  const { showToast } = useToast();
   const navigate = useNavigate();
   const [tab, setTab] = useState('videos');
   const [myVideos, setMyVideos] = useState([]);
   const [historyVideos, setHistoryVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(null);
   const avatarRef = useRef();
+
+  const showToast = (msg, type = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  };
 
 useEffect(() => {
   if (!user) { navigate('/login'); return; }
@@ -53,6 +58,18 @@ const handleDelete = async (videoId) => {
 
   return (
     <div className="profile-page fade-in">
+
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
+          background: toast.type === 'error' ? '#e53e3e' : '#38a169',
+          color: '#fff', padding: '12px 20px', borderRadius: 8,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.2)', fontSize: 14
+        }}>
+          {toast.msg}
+        </div>
+      )}
+
       <div className="profile-header">
         <div className="profile-cover" />
         <div className="profile-info">
