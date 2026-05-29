@@ -1,0 +1,364 @@
+// ============================================
+// StreamVibe – Watch Video Page
+// ============================================
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import VideoCard from '../components/video/VideoCard';
+import {
+  getVideoById, getVideos, getComments, addComment, deleteComment,
+  toggleLike, isLiked, toggleSaved, isSaved, incrementViews,
+  addToWatchHistory, formatViews, formatDate, deleteVideo,
+  toggleSubscription, isSubscribed
+} from '../utils/storage';
+import './Watch.css';
+
+const Watch = () => {
+  const { id } = useParams();
+  const { user } = useAuth();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
+
+  const [video, setVideo] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [relatedVideos, setRelatedVideos] = useState([]);
+  const [liked, setLiked] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+  const [commentText, setCommentText] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [commentError, setCommentError] = useState('');
+  const hasTrackedView = useRef(false);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    const timer = setTimeout(() => {
+      const v = getVideoById(id);
+      if (!v) {
+        setError('Video not found');
+        setLoading(false);
+        return;
+      }
+
+      setVideo(v);
+      setComments(getComments(id));
+
+      // Track view once
+      if (!hasTrackedView.current) {
+        incrementViews(id);
+        hasTrackedView.current = true;
+      }
+
+      // Add to watch history
+      if (user) addToWatchHistory(user.id, id);
+
+      // Load states
+      if (user) {
+        setLiked(isLiked(id, user.id));
+        setSaved(isSaved(user.id, id));
+        setSubscribed(isSubscribed(user.id, v.uploaderId));
+      }
+
+      // Related videos
+      const all = getVideos().filter(vi => vi.id !== id);
+      const same = all.filter(vi => vi.category === v.category).slice(0, 4);
+      const others = all.filter(vi => vi.category !== v.category).slice(0, 4 - same.length);
+      setRelatedVideos([...same, ...others]);
+
+      setLoading(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [id, user]);
+
+  const handleLike = () => {
+    if (!user) { showToast('Sign in to like videos', 'info'); navigate('/login'); return; }
+    const nowLiked = toggleLike(id, user.id);
+    setLiked(nowLiked);
+    setVideo(prev => ({ ...prev, likes: prev.likes + (nowLiked ? 1 : -1) }));
+    showToast(nowLiked ? 'Video liked! ❤️' : 'Like removed', 'success');
+  };
+
+  const handleSave = () => {
+    if (!user) { showToast('Sign in to save videos', 'info'); navigate('/login'); return; }
+    const nowSaved = toggleSaved(user.id, id);
+    setSaved(nowSaved);
+    showToast(nowSaved ? 'Saved to your library 🔖' : 'Removed from saved', 'success');
+  };
+
+  const handleSubscribe = () => {
+    if (!user) { showToast('Sign in to subscribe', 'info'); navigate('/login'); return; }
+    const nowSub = toggleSubscription(user.id, video.uploaderId);
+    setSubscribed(nowSub);
+    showToast(nowSub ? `Subscribed to ${video.channelName}! 📡` : 'Unsubscribed', 'success');
+  };
+
+  const handleComment = (e) => {
+    e.preventDefault();
+    if (!user) { showToast('Sign in to comment', 'info'); navigate('/login'); return; }
+    if (!commentText.trim()) { setCommentError('Comment cannot be empty'); return; }
+    if (commentText.trim().length > 500) { setCommentError('Comment too long (max 500 chars)'); return; }
+
+    const newComment = addComment(id, {
+      text: commentText.trim(),
+      userId: user.id,
+      username: user.username,
+      avatar: user.avatar,
+    });
+    setComments(prev => [newComment, ...prev]);
+    setCommentText('');
+    setCommentError('');
+    showToast('Comment posted!', 'success');
+  };
+
+  const handleDeleteComment = (commentId) => {
+    if (!user) return;
+    const ok = deleteComment(id, commentId, user.id);
+    if (ok) {
+      setComments(prev => prev.filter(c => c.id !== commentId));
+      showToast('Comment deleted', 'info');
+    }
+  };
+
+  const handleDeleteVideo = () => {
+    if (!user || !window.confirm('Are you sure you want to delete this video? This cannot be undone.')) return;
+    const ok = deleteVideo(id, user.id);
+    if (ok) {
+      showToast('Video deleted successfully', 'success');
+      navigate('/profile');
+    } else {
+      showToast('Could not delete video', 'error');
+    }
+  };
+
+  const handleShare = () => {
+    navigator.clipboard?.writeText(window.location.href);
+    showToast('Link copied to clipboard 📋', 'success');
+  };
+
+  if (loading) {
+    return (
+      <div className="watch-page">
+        <div className="watch-skeleton">
+          <div className="skeleton-video-player" />
+          <div className="skeleton-video-info">
+            <div className="skeleton-box" style={{ height: 28, width: '70%' }} />
+            <div className="skeleton-box" style={{ height: 16, width: '40%', marginTop: 12 }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="watch-error fade-in">
+        <div className="empty-state">
+          <div className="empty-state-icon">😕</div>
+          <h3>Video Not Found</h3>
+          <p>This video doesn't exist or may have been removed.</p>
+          <Link to="/" className="btn btn-primary" style={{ marginTop: 8 }}>Go Home</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="watch-page fade-in">
+      <div className="watch-layout">
+        {/* Main content */}
+        <div className="watch-main">
+          {/* Player */}
+          <div className="video-player-wrap">
+            {video.videoUrl ? (
+              <video
+                src={video.videoUrl}
+                controls
+                autoPlay
+                className="video-player"
+                poster={video.thumbnail || undefined}
+              />
+            ) : (
+              <div
+                className="video-player-placeholder"
+                style={{
+                  background: video.thumbnail
+                    ? `url(${video.thumbnail}) center/cover`
+                    : 'linear-gradient(135deg, #0a1628, #1a3a2a 50%, #00ff87)'
+                }}
+              >
+                <div className="no-video-overlay">
+                  <div className="no-video-icon">▶</div>
+                  <p>No video file — demo content</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Video Info */}
+          <div className="video-info-block">
+            <h1 className="watch-title">{video.title}</h1>
+
+            <div className="watch-meta-row">
+              <div className="watch-stats">
+                <span>{formatViews(video.views)} views</span>
+                <span className="dot">·</span>
+                <span>{formatDate(video.uploadedAt)}</span>
+                {video.category && (
+                  <span className="badge badge-green">{video.category}</span>
+                )}
+              </div>
+
+              <div className="watch-actions">
+                <button
+                  className={`watch-action-btn ${liked ? 'active' : ''}`}
+                  onClick={handleLike}
+                >
+                  <span>{liked ? '❤️' : '🤍'}</span>
+                  <span>{formatViews(video.likes)}</span>
+                </button>
+
+                <button
+                  className={`watch-action-btn ${saved ? 'active' : ''}`}
+                  onClick={handleSave}
+                >
+                  <span>{saved ? '🔖' : '📌'}</span>
+                  <span>Save</span>
+                </button>
+
+                <button className="watch-action-btn" onClick={handleShare}>
+                  <span>🔗</span>
+                  <span>Share</span>
+                </button>
+
+                {user && user.id === video.uploaderId && (
+                  <button className="watch-action-btn danger" onClick={handleDeleteVideo}>
+                    <span>🗑</span>
+                    <span>Delete</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="divider" />
+
+            {/* Channel info */}
+            <div className="channel-row">
+              <div className="channel-avatar">
+                {video.uploaderUsername?.[0]?.toUpperCase() || 'U'}
+              </div>
+              <div className="channel-info">
+                <h3 className="channel-name">{video.channelName}</h3>
+                <p className="channel-handle">@{video.uploaderUsername}</p>
+              </div>
+              <button
+                className={`btn ${subscribed ? 'btn-ghost' : 'btn-primary'} btn-sm`}
+                onClick={handleSubscribe}
+              >
+                {subscribed ? '✓ Subscribed' : '+ Subscribe'}
+              </button>
+            </div>
+
+            {/* Description */}
+            {video.description && (
+              <div className="video-description">
+                <p>{video.description}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Comments */}
+          <div className="comments-section">
+            <h2 className="comments-heading">
+              💬 Comments <span className="comments-count">{comments.length}</span>
+            </h2>
+
+            {/* Add Comment */}
+            <form className="comment-form" onSubmit={handleComment}>
+              <div className="comment-avatar">
+                {user ? (user.avatar
+                  ? <img src={user.avatar} alt="" className="comment-avatar-img" />
+                  : <span>{user.username?.[0]?.toUpperCase()}</span>
+                ) : <span>?</span>}
+              </div>
+              <div className="comment-input-wrap">
+                <textarea
+                  className="form-input form-textarea comment-textarea"
+                  placeholder={user ? 'Add a comment...' : 'Sign in to comment...'}
+                  value={commentText}
+                  onChange={e => { setCommentText(e.target.value); setCommentError(''); }}
+                  rows={2}
+                  disabled={!user}
+                  maxLength={500}
+                />
+                {commentError && <span className="form-error">{commentError}</span>}
+                {commentText.trim() && (
+                  <div className="comment-actions">
+                    <button type="button" className="btn btn-ghost btn-sm" onClick={() => setCommentText('')}>
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn btn-primary btn-sm">
+                      Comment
+                    </button>
+                  </div>
+                )}
+              </div>
+            </form>
+
+            {/* Comment List */}
+            <div className="comments-list">
+              {comments.length === 0 ? (
+                <div className="no-comments">
+                  <span>💬</span>
+                  <p>Be the first to comment!</p>
+                </div>
+              ) : (
+                comments.map(c => (
+                  <div key={c.id} className="comment-item">
+                    <div className="comment-avatar">
+                      {c.avatar
+                        ? <img src={c.avatar} alt="" className="comment-avatar-img" />
+                        : <span>{c.username?.[0]?.toUpperCase()}</span>
+                      }
+                    </div>
+                    <div className="comment-content">
+                      <div className="comment-header">
+                        <span className="comment-username">@{c.username}</span>
+                        <span className="comment-date">{formatDate(c.createdAt)}</span>
+                      </div>
+                      <p className="comment-text">{c.text}</p>
+                    </div>
+                    {user && user.id === c.userId && (
+                      <button
+                        className="comment-delete-btn"
+                        onClick={() => handleDeleteComment(c.id)}
+                        title="Delete comment"
+                      >
+                        🗑
+                      </button>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar – Related Videos */}
+        <aside className="watch-sidebar">
+          <h3 className="related-heading">Up Next</h3>
+          <div className="related-list">
+            {relatedVideos.map(v => (
+              <VideoCard key={v.id} video={v} compact />
+            ))}
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+};
+
+export default Watch;

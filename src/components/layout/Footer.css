@@ -1,0 +1,125 @@
+/* Footer Styles */
+.footer {
+  background: var(--bg-2);
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 300px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.footer-logo-icon {
+  font-size: 20px;
+  color: var(--green);
+}
+
+.footer-logo span {
+  color: var(--green);
+}
+
+.footer-tagline {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.footer-links-grid {
+  display: flex;
+  gap: 48px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-col h4 {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.footer-col a {
+  font-size: 14px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.footer-col a:hover {
+  color: var(--green);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-bottom p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-bottom-links span {
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.footer-bottom-links span:hover {
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer-links-grid {
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+}

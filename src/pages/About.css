@@ -1,0 +1,16 @@
+.about-page { max-width: 1000px; display: flex; flex-direction: column; gap: 48px; }
+.about-hero { text-align: center; padding: 48px 0 0; }
+.about-title { font-family: var(--font-display); font-size: 48px; font-weight: 800; margin-bottom: 16px; }
+.about-title span { color: var(--green); }
+.about-lead { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0 auto; }
+.about-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.about-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; display: flex; flex-direction: column; gap: 12px; transition: border-color var(--transition); }
+.about-card:hover { border-color: var(--green); }
+.about-card-icon { font-size: 36px; }
+.about-card h3 { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+.about-card p { color: var(--text-muted); line-height: 1.7; font-size: 14px; }
+.about-team { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px; display: flex; flex-direction: column; gap: 16px; }
+.about-team h2 { font-family: var(--font-display); font-size: 22px; font-weight: 800; }
+.about-team p { color: var(--text-muted); line-height: 1.7; }
+.about-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+@media (max-width: 640px) { .about-grid { grid-template-columns: 1fr; } .about-title { font-size: 32px; } }

@@ -1,0 +1,390 @@
+/* Watch Page */
+.watch-page {
+  max-width: 1400px;
+}
+
+.watch-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Player */
+.video-player-wrap {
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  width: 100%;
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.video-player-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-video-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+}
+
+.no-video-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(0,255,135,0.2);
+  border: 2px solid var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: var(--green);
+}
+
+/* Video info */
+.video-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 0 8px;
+}
+
+.watch-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.watch-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.watch-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.watch-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.watch-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: all var(--transition);
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.watch-action-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.watch-action-btn.active {
+  background: var(--green-glow);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.watch-action-btn.danger:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(255,68,68,0.1);
+}
+
+/* Channel */
+.channel-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.channel-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.channel-info {
+  flex: 1;
+}
+
+.channel-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.channel-handle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Description */
+.video-description {
+  background: var(--bg-3);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.video-description p {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* Comments */
+.comments-section {
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.comments-heading {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comments-count {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.comment-form {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.comment-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.comment-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-input-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-textarea {
+  min-height: 60px;
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.comment-item {
+  display: flex;
+  gap: 12px;
+  position: relative;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.comment-username {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.comment-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.comment-delete-btn {
+  opacity: 0;
+  transition: opacity var(--transition);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+}
+
+.comment-item:hover .comment-delete-btn {
+  opacity: 1;
+}
+
+.no-comments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.no-comments span {
+  font-size: 36px;
+}
+
+/* Related sidebar */
+.watch-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.related-heading {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.related-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Skeletons */
+.watch-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.skeleton-video-player {
+  aspect-ratio: 16/9;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-video-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.skeleton-box {
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.watch-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .watch-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .watch-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .watch-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

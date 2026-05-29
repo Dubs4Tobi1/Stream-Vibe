@@ -1,0 +1,214 @@
+/* ============================================
+   VideoCard Styles
+   ============================================ */
+
+.video-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 0.4s ease both;
+}
+
+.video-card-thumb-wrap {
+  position: relative;
+  display: block;
+  aspect-ratio: 16/9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-3);
+}
+
+.video-card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.video-card-thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.thumb-emoji {
+  font-size: 40px;
+  opacity: 0.8;
+}
+
+.video-card-thumb-wrap:hover .video-card-thumb {
+  transform: scale(1.05);
+}
+
+.video-duration {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  padding: 2px 7px;
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+.video-card-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.video-card-thumb-wrap:hover .video-card-hover-overlay {
+  background: rgba(0,0,0,0.35);
+}
+
+.play-icon {
+  font-size: 42px;
+  color: #fff;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: all 0.25s ease;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+
+.video-card-thumb-wrap:hover .play-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Info section */
+.video-card-info {
+  display: flex;
+  gap: 12px;
+  position: relative;
+}
+
+.mini-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.video-card-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.video-card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text);
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--transition);
+}
+
+.video-card-title:hover {
+  color: var(--green);
+}
+
+.video-card-channel {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.video-card-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.dot {
+  opacity: 0.5;
+}
+
+.video-category-tag {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--green);
+  background: var(--green-glow);
+  padding: 2px 8px;
+  border-radius: 100px;
+  margin-top: 4px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+/* Delete button */
+.video-card-delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  opacity: 0;
+  transition: all var(--transition);
+  background: transparent;
+}
+
+.video-card:hover .video-card-delete-btn {
+  opacity: 1;
+}
+
+.video-card-delete-btn:hover {
+  background: rgba(255,68,68,0.15);
+}
+
+/* Compact variant */
+.video-card.compact {
+  flex-direction: row;
+  gap: 12px;
+}
+
+.video-card.compact .video-card-thumb-wrap {
+  width: 160px;
+  flex-shrink: 0;
+  aspect-ratio: 16/9;
+}
+
+.video-card.compact .video-card-info {
+  flex: 1;
+}
+
+.video-card.compact .video-card-title {
+  font-size: 13px;
+}
+
+@media (max-width: 480px) {
+  .video-card.compact .video-card-thumb-wrap {
+    width: 120px;
+  }
+}
