@@ -32,113 +32,97 @@ const Watch = () => {
   const [commentError, setCommentError] = useState('');
   const hasTrackedView = useRef(false);
 
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    const timer = setTimeout(() => {
-      const v = getVideoById(id);
-      if (!v) {
-        setError('Video not found');
-        setLoading(false);
-        return;
-      }
-
-      setVideo(v);
-      setComments(getComments(id));
-
-      // Track view once
-      if (!hasTrackedView.current) {
-        incrementViews(id);
-        hasTrackedView.current = true;
-      }
-
-      // Add to watch history
-      if (user) addToWatchHistory(user.id, id);
-
-      // Load states
-      if (user) {
-        setLiked(isLiked(id, user.id));
-        setSaved(isSaved(user.id, id));
-        setSubscribed(isSubscribed(user.id, v.uploaderId));
-      }
-
-      // Related videos
-      const all = getVideos().filter(vi => vi.id !== id);
-      const same = all.filter(vi => vi.category === v.category).slice(0, 4);
-      const others = all.filter(vi => vi.category !== v.category).slice(0, 4 - same.length);
-      setRelatedVideos([...same, ...others]);
-
-      setLoading(false);
-    }, 600);
-
-    return () => clearTimeout(timer);
-  }, [id, user]);
-
-  const handleLike = () => {
-    if (!user) { showToast('Sign in to like videos', 'info'); navigate('/login'); return; }
-    const nowLiked = toggleLike(id, user.id);
-    setLiked(nowLiked);
-    setVideo(prev => ({ ...prev, likes: prev.likes + (nowLiked ? 1 : -1) }));
-    showToast(nowLiked ? 'Video liked! ❤️' : 'Like removed', 'success');
+useEffect(() => {
+  setLoading(true);
+  const load = async () => {
+    const v = await getVideoById(id);             // add await
+    if (!v) { setError('Video not found'); setLoading(false); return; }
+    setVideo(v);
+    setComments(await getComments(id));           // add await
+    await incrementViews(id);
+    if (user) {
+      await addToWatchHistory(user.id, id);
+      setLiked(await isLiked(id, user.id));       // add await
+      setSaved(await isSaved(user.id, id));        // add await
+      setSubscribed(await isSubscribed(user.id, v.uploaderId)); // add await
+    }
+    const all = await getVideos();                 // add await
+    const related = all.filter(vi => vi.id !== id).slice(0, 6);
+    setRelatedVideos(related);
+    setLoading(false);
   };
+  load();
+}, [id, user]);
 
-  const handleSave = () => {
-    if (!user) { showToast('Sign in to save videos', 'info'); navigate('/login'); return; }
-    const nowSaved = toggleSaved(user.id, id);
-    setSaved(nowSaved);
-    showToast(nowSaved ? 'Saved to your library 🔖' : 'Removed from saved', 'success');
-  };
+  const handleLike = async () => {
+  if (!user) { showToast('Sign in to like videos', 'info'); navigate('/login'); return; }
+  const nowLiked = await toggleLike(id, user.id);
+  setLiked(nowLiked);
+  setVideo(prev => ({ ...prev, likes: prev.likes + (nowLiked ? 1 : -1) }));
+  showToast(nowLiked ? 'Video liked! ❤️' : 'Like removed', 'success');
+};
 
-  const handleSubscribe = () => {
-    if (!user) { showToast('Sign in to subscribe', 'info'); navigate('/login'); return; }
-    const nowSub = toggleSubscription(user.id, video.uploaderId);
-    setSubscribed(nowSub);
-    showToast(nowSub ? `Subscribed to ${video.channelName}! 📡` : 'Unsubscribed', 'success');
-  };
+const handleSave = async () => {
+  if (!user) { showToast('Sign in to save videos', 'info'); navigate('/login'); return; }
+  const nowSaved = await toggleSaved(user.id, id);
+  setSaved(nowSaved);
+  showToast(nowSaved ? 'Saved to your library 🔖' : 'Removed from saved', 'success');
+};
 
-  const handleComment = (e) => {
-    e.preventDefault();
-    if (!user) { showToast('Sign in to comment', 'info'); navigate('/login'); return; }
-    if (!commentText.trim()) { setCommentError('Comment cannot be empty'); return; }
-    if (commentText.trim().length > 500) { setCommentError('Comment too long (max 500 chars)'); return; }
+const handleSubscribe = async () => {
+  if (!user) { showToast('Sign in to subscribe', 'info'); navigate('/login'); return; }
+  const nowSub = await toggleSubscription(user.id, video.uploaderId);
+  setSubscribed(nowSub);
+  showToast(nowSub ? `Subscribed to ${video.channelName}! 📡` : 'Unsubscribed', 'success');
+};
 
-    const newComment = addComment(id, {
+const handleComment = async (e) => {
+  e.preventDefault();
+  if (!user) { showToast('Sign in to comment', 'info'); navigate('/login'); return; }
+  if (!commentText.trim()) { setCommentError('Comment cannot be empty'); return; }
+  if (commentText.trim().length > 500) { setCommentError('Comment too long (max 500 chars)'); return; }
+
+  try {
+    const newComment = await addComment(id, {
       text: commentText.trim(),
       userId: user.id,
       username: user.username,
-      avatar: user.avatar,
     });
     setComments(prev => [newComment, ...prev]);
     setCommentText('');
     setCommentError('');
     showToast('Comment posted!', 'success');
-  };
+  } catch {
+    showToast('Failed to post comment', 'error');
+  }
+};
 
-  const handleDeleteComment = (commentId) => {
-    if (!user) return;
-    const ok = deleteComment(id, commentId, user.id);
-    if (ok) {
-      setComments(prev => prev.filter(c => c.id !== commentId));
-      showToast('Comment deleted', 'info');
-    }
-  };
+const handleDeleteComment = async (commentId) => {
+  if (!user) return;
+  const ok = await deleteComment(id, commentId, user.id);
+  if (ok) {
+    setComments(prev => prev.filter(c => c.id !== commentId));
+    showToast('Comment deleted', 'info');
+  } else {
+    showToast('Failed to delete comment', 'error');
+  }
+};
 
-  const handleDeleteVideo = () => {
-    if (!user || !window.confirm('Are you sure you want to delete this video? This cannot be undone.')) return;
-    const ok = deleteVideo(id, user.id);
-    if (ok) {
-      showToast('Video deleted successfully', 'success');
-      navigate('/profile');
-    } else {
-      showToast('Could not delete video', 'error');
-    }
-  };
+const handleDeleteVideo = async () => {
+  if (!user || !window.confirm('Are you sure you want to delete this video? This cannot be undone.')) return;
+  const ok = await deleteVideo(id, user.id);
+  if (ok) {
+    showToast('Video deleted successfully', 'success');
+    navigate('/profile');
+  } else {
+    showToast('Could not delete video', 'error');
+  }
+};
 
-  const handleShare = () => {
-    navigator.clipboard?.writeText(window.location.href);
-    showToast('Link copied to clipboard 📋', 'success');
-  };
-
+const handleShare = () => {
+  navigator.clipboard?.writeText(window.location.href);
+  showToast('Link copied to clipboard 📋', 'success');
+};
   if (loading) {
     return (
       <div className="watch-page">

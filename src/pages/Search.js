@@ -16,11 +16,13 @@ const Search = () => {
     const q = params.get('q') || '';
     setQuery(q);
     setLoading(true);
-    const timer = setTimeout(() => {
-      setResults(searchVideos(q));
+
+    const load = async () => {
+      const data = await searchVideos(q);
+      setResults(data);
       setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    };
+    load();
   }, [location.search]);
 
   return (
@@ -29,7 +31,9 @@ const Search = () => {
         <h1 className="search-title">
           {query ? <>Results for <span className="search-query">"{query}"</span></> : 'Search Videos'}
         </h1>
-        {!loading && <p className="search-count">{results.length} video{results.length !== 1 ? 's' : ''} found</p>}
+        {!loading && (
+          <p className="search-count">{results.length} video{results.length !== 1 ? 's' : ''} found</p>
+        )}
       </div>
 
       {loading ? (

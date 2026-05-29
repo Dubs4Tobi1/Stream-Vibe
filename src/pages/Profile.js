@@ -1,10 +1,7 @@
+import { getVideos, deleteVideo, getWatchHistory, getVideoById, updateUserProfile, uploadAvatar, formatDate } from '../utils/storage';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import VideoCard from '../components/video/VideoCard';
-import { getVideos, deleteVideo, getWatchHistory, getVideoById, updateUserProfile, formatDate } from '../utils/storage';
-import './Profile.css';
 
 const Profile = () => {
   const { user, logout, refreshUser } = useAuth();
@@ -16,36 +13,39 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const avatarRef = useRef();
 
-  useEffect(() => {
-    if (!user) { navigate('/login'); return; }
-    const all = getVideos();
+useEffect(() => {
+  if (!user) { navigate('/login'); return; }
+  const load = async () => {
+    const all = await getVideos();
     setMyVideos(all.filter(v => v.uploaderId === user.id));
-    const hist = getWatchHistory(user.id);
-    setHistoryVideos(hist.map(id => getVideoById(id)).filter(Boolean).slice(0, 20));
+    const histIds = await getWatchHistory(user.id);
+    const histVideos = await Promise.all(histIds.map(id => getVideoById(id)));
+    setHistoryVideos(histVideos.filter(Boolean).slice(0, 20));
     setLoading(false);
-  }, [user, navigate]);
-
-  const handleDelete = (videoId) => {
-    if (!window.confirm('Delete this video? This cannot be undone.')) return;
-    const ok = deleteVideo(videoId, user.id);
-    if (ok) {
-      setMyVideos(prev => prev.filter(v => v.id !== videoId));
-      showToast('Video deleted', 'success');
-    }
   };
+  load();
+}, [user, navigate]);
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) { showToast('Please select an image', 'error'); return; }
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      updateUserProfile(user.id, { avatar: ev.target.result });
-      refreshUser();
-      showToast('Profile picture updated!', 'success');
-    };
-    reader.readAsDataURL(file);
-  };
+const handleDelete = async (videoId) => {
+  if (!window.confirm('Delete this video?')) return;
+  const ok = await deleteVideo(videoId, user.id);
+  if (ok) {
+    setMyVideos(prev => prev.filter(v => v.id !== videoId));
+    showToast('Video deleted', 'success');
+  }
+};
+
+ const handleAvatarChange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    await uploadAvatar(file, user.id);
+    refreshUser();
+    showToast('Profile picture updated!', 'success');
+  } catch {
+    showToast('Failed to upload avatar', 'error');
+  }
+};
 
   const handleLogout = () => { logout(); navigate('/'); };
 

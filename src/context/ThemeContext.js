@@ -1,17 +1,13 @@
-// ============================================
-// StreamVibe – Theme Context
-// ============================================
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { lsGet, lsSet, KEYS } from '../utils/storage';
 
 const ThemeContext = createContext(null);
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => lsGet(KEYS.THEME, 'dark'));
+  const [theme, setTheme] = useState(() => localStorage.getItem('sv_theme') || 'dark');
 
   useEffect(() => {
     document.body.classList.toggle('light', theme === 'light');
-    lsSet(KEYS.THEME, theme);
+    localStorage.setItem('sv_theme', theme);
   }, [theme]);
 
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');

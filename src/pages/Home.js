@@ -15,15 +15,14 @@ const Home = () => {
   const [filteredVideos, setFilteredVideos] = useState([]);
 
   useEffect(() => {
-    // Simulate network delay for loading state demo
-    const timer = setTimeout(() => {
-      const all = getVideos();
-      setVideos(all);
-      setFilteredVideos(all);
-      setLoading(false);
-    }, 700);
-    return () => clearTimeout(timer);
-  }, []);
+  const load = async () => {
+    const all = await getVideos();   // add await
+    setVideos(all);
+    setFilteredVideos(all);
+    setLoading(false);
+  };
+  load();
+}, []);
 
   useEffect(() => {
     if (activeCategory === 'All') {

@@ -58,8 +58,11 @@ const Upload = () => {
     }
     const reader = new FileReader();
     reader.onload = (ev) => {
-      setThumbnail(ev.target.result);
-      setThumbnailPreview(ev.target.result);
+        setThumbnail(file);              // store File object
+        setThumbnailPreview(URL.createObjectURL(file));  // for display only
+
+// In handleVideo:
+setVideoFile(file);              // already correct
     };
     reader.readAsDataURL(file);
   };
@@ -115,17 +118,18 @@ const Upload = () => {
       setUploadProgress(i);
     }
 
-    const newVideo = addVideo({
-      title: formData.title.trim(),
-      description: formData.description.trim(),
-      category: formData.category,
-      channelName: formData.channelName.trim(),
-      duration: formData.duration || '0:00',
-      thumbnail: thumbnail,
-      videoUrl: videoPreviewUrl || null,
-      uploaderId: user.id,
-      uploaderUsername: user.username,
-    });
+    const newVideo = await addVideo({
+  title: formData.title.trim(),
+  description: formData.description.trim(),
+  category: formData.category,
+  channelName: formData.channelName.trim(),
+  duration: formData.duration || '0:00',
+  thumbnailFile: thumbnail,   // pass the raw File object, not base64
+  videoFile: videoFile,
+  uploaderId: user.id,
+  uploaderUsername: user.username,
+  onProgress: setUploadProgress,
+});
 
     setUploadProgress(100);
     await new Promise(r => setTimeout(r, 300));

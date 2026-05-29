@@ -8,12 +8,13 @@ const Trending = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => {
-      const sorted = [...getVideos()].sort((a, b) => b.views - a.views);
+    const load = async () => {
+      const all = await getVideos();
+      const sorted = [...all].sort((a, b) => b.views - a.views);
       setVideos(sorted);
       setLoading(false);
-    }, 500);
-    return () => clearTimeout(t);
+    };
+    load();
   }, []);
 
   return (
