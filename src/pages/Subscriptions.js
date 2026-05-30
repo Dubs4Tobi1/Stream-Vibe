@@ -32,13 +32,13 @@ const Subscriptions = () => {
 
   return (
     <div className="fade-in">
-      <h1 className="section-heading" style={{ fontSize: 26, marginBottom: 28 }}>📡 Subscriptions</h1>
+      <h1 className="section-heading" style={{ fontSize: 26, marginBottom: 28 }}> Subscriptions</h1>
 
       {loading ? (
         <VideoGridSkeleton count={6} />
       ) : videos.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">📡</div>
+          <div className="empty-state-icon"></div>
           <h3>No subscriptions yet</h3>
           <p>Subscribe to channels on video pages to see their content here.</p>
         </div>
