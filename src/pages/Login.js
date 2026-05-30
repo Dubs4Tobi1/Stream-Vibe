@@ -44,7 +44,7 @@ const Login = () => {
     // Small delay for UX
     await new Promise(r => setTimeout(r, 500));
 
-    const result = login(formData.email, formData.password);
+   const result = await login(formData.email, formData.password);
     if (result.success) {
       showToast('Welcome back! 🎉', 'success');
       navigate('/');

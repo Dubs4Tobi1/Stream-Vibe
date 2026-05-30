@@ -54,7 +54,7 @@ const Register = () => {
     setLoading(true);
     await new Promise(r => setTimeout(r, 600));
 
-    const result = register(formData);
+    const result = await register(formData);
     if (result.success) {
       showToast('Account created! Welcome to StreamVibe 🎉', 'success');
       navigate('/');
