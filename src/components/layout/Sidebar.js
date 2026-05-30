@@ -7,16 +7,16 @@ import { useAuth } from '../../context/AuthContext';
 import './Sidebar.css';
 
 const NAV_ITEMS = [
-  { to: '/', icon: '🏠', label: 'Home', exact: true },
-  { to: '/trending', icon: '🔥', label: 'Trending' },
-  { to: '/saved', icon: '🔖', label: 'Saved', auth: true },
-  { to: '/history', icon: '🕐', label: 'History', auth: true },
-  { to: '/subscriptions', icon: '📡', label: 'Subscriptions', auth: true },
+  { to: '/', icon: '', label: 'Home', exact: true },
+  { to: '/trending', icon: '', label: 'Trending' },
+  { to: '/saved', icon: '', label: 'Saved', auth: true },
+  { to: '/history', icon: '', label: 'History', auth: true },
+  { to: '/subscriptions', icon: '', label: 'Subscriptions', auth: true },
 ];
 
 const MORE_ITEMS = [
   { to: '/about', icon: 'ℹ️', label: 'About' },
-  { to: '/contact', icon: '✉️', label: 'Contact' },
+  { to: '/contact', icon: '', label: 'Contact' },
   { to: '/settings', icon: '⚙️', label: 'Settings' },
 ];
 
