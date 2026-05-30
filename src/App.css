@@ -25,3 +25,16 @@
     padding: 20px 16px;
   }
 }
+@media (max-width: 768px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .navbar {
+    padding: 0 16px;
+  }
+}
