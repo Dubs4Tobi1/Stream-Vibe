@@ -40,7 +40,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>© 2024 StreamVibe. University Group Project. Built with React.</p>
+        <p>© 2026 StreamVibe.  Group L. Built with React.</p>
         <div className="footer-bottom-links">
           <span>Privacy Policy</span>
           <span>Terms of Service</span>
