@@ -1,4 +1,4 @@
-import VideoCard from '../components/VideoCard';
+import VideoCard from '../components/video/VideoCard';
 import { getVideos, deleteVideo, getWatchHistory, getVideoById, updateUserProfile, uploadAvatar, formatDate } from '../utils/storage';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
