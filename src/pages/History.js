@@ -38,7 +38,7 @@ const History = () => {
   return (
     <div className="fade-in">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
-        <h1 className="section-heading" style={{ fontSize: 26, marginBottom: 0 }}>🕐 Watch History</h1>
+        <h1 className="section-heading" style={{ fontSize: 26, marginBottom: 0 }}> Watch History</h1>
         {videos.length > 0 && (
           <button className="btn btn-ghost btn-sm" onClick={clearHistory}>Clear All</button>
         )}
@@ -48,7 +48,7 @@ const History = () => {
         <VideoGridSkeleton count={6} />
       ) : videos.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">🕐</div>
+          <div className="empty-state-icon"></div>
           <h3>No history yet</h3>
           <p>Videos you watch will appear here.</p>
         </div>
