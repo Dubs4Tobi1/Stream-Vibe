@@ -1,6 +1,3 @@
-// ============================================
-// StreamVibe – Navbar Component
-// ============================================
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -14,9 +11,7 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const searchRef = useRef(null);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -29,9 +24,6 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setSearchOpen(false);
-      }
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
@@ -41,7 +33,6 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchOpen(false);
     }
   };
 
@@ -65,8 +56,7 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
         </Link>
       </div>
 
-      {/* Desktop search */}
-      <form className="navbar-search desktop-search" onSubmit={handleSearch}>
+      <form className="navbar-search" onSubmit={handleSearch}>
         <input
           type="text"
           className="search-input"
@@ -82,34 +72,7 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
         </button>
       </form>
 
-      {/* Mobile search overlay */}
-      {searchOpen && (
-        <form className="navbar-search mobile-search" onSubmit={handleSearch} ref={searchRef}>
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            autoFocus
-            aria-label="Search"
-          />
-          <button type="submit" className="search-btn" aria-label="Submit search">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
-          </button>
-        </form>
-      )}
-
       <div className="navbar-right">
-        {/* Mobile search toggle */}
-        <button className="nav-icon-btn mobile-search-btn" onClick={() => setSearchOpen(o => !o)} aria-label="Search">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-          </svg>
-        </button>
-
         <button className="nav-icon-btn" onClick={toggleTheme} title="Toggle theme">
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
@@ -120,7 +83,7 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
               </svg>
-              <span className="upload-label">Upload</span>
+              <span>Upload</span>
             </Link>
 
             <div className="user-menu" ref={dropdownRef}>
@@ -161,7 +124,7 @@ const Navbar = ({ onMenuToggle, sidebarOpen }) => {
         ) : (
           <div className="nav-auth-btns">
             <Link to="/login" className="btn btn-ghost btn-sm">Sign In</Link>
-            <Link to="/register" className="btn btn-primary btn-sm join-btn">Join Free</Link>
+            <Link to="/register" className="btn btn-primary btn-sm">Join Free</Link>
           </div>
         )}
       </div>

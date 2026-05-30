@@ -1,6 +1,3 @@
-// ============================================
-// StreamVibe – Sidebar Component
-// ============================================
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -35,7 +32,6 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Mobile overlay */}
       {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
 
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
@@ -97,8 +93,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         </nav>
 
         <div className="sidebar-footer">
-          <p>© 2026 StreamVibe</p>
-          <p>Group L ICT 211</p>
+          <p>© 2024 StreamVibe</p>
+          <p>University Group Project</p>
         </div>
       </aside>
     </>

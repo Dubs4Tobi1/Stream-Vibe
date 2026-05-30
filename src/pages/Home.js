@@ -1,6 +1,3 @@
-// ============================================
-// StreamVibe – Home Page
-// ============================================
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import VideoCard from '../components/video/VideoCard';
@@ -15,14 +12,14 @@ const Home = () => {
   const [filteredVideos, setFilteredVideos] = useState([]);
 
   useEffect(() => {
-  const load = async () => {
-    const all = await getVideos();   // add await
-    setVideos(all);
-    setFilteredVideos(all);
-    setLoading(false);
-  };
-  load();
-}, []);
+    const load = async () => {
+      const all = await getVideos();
+      setVideos(all);
+      setFilteredVideos(all);
+      setLoading(false);
+    };
+    load();
+  }, []);
 
   useEffect(() => {
     if (activeCategory === 'All') {
@@ -37,7 +34,6 @@ const Home = () => {
 
   return (
     <div className="home-page fade-in">
-      {/* Hero Banner */}
       <div className="hero-banner">
         <div className="hero-content">
           <div className="hero-badge badge badge-green">🔴 Live Platform</div>
@@ -65,7 +61,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Category Filter */}
       <div className="category-bar">
         <div className="category-scroll">
           {CATEGORIES.map(cat => (
@@ -84,7 +79,6 @@ const Home = () => {
         <VideoGridSkeleton count={8} />
       ) : (
         <>
-          {/* Trending Section */}
           {activeCategory === 'All' && trending.length > 0 && (
             <section className="home-section">
               <h2 className="section-heading">🔥 Trending Now</h2>
@@ -96,10 +90,8 @@ const Home = () => {
             </section>
           )}
 
-          {/* Divider */}
           {activeCategory === 'All' && <div className="divider" />}
 
-          {/* Main Feed */}
           <section className="home-section">
             <h2 className="section-heading">
               {activeCategory === 'All' ? '🎬 All Videos' : `${activeCategory} Videos`}

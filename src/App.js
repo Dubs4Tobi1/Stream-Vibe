@@ -1,20 +1,14 @@
-// ============================================
-// StreamVibe – App Root & Router
-// ============================================
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Context Providers
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 
-// Layout
 import Navbar from './components/layout/Navbar';
 import Sidebar from './components/layout/Sidebar';
 import Footer from './components/layout/Footer';
 
-// Pages
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -31,11 +25,9 @@ import Contact from './pages/Contact';
 import Settings from './pages/Settings';
 import NotFound from './pages/NotFound';
 
-// Styles
 import './styles/global.css';
 import './App.css';
 
-// Pages that use full-width layout (no sidebar offset)
 const FULL_WIDTH_PAGES = ['/login', '/register'];
 
 function AppLayout() {
