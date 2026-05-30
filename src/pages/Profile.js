@@ -1,5 +1,5 @@
 import VideoCard from '../components/video/VideoCard';
-import { getVideos, deleteVideo, getWatchHistory, getVideoById, updateUserProfile, uploadAvatar, formatDate } from '../utils/storage';
+import { getVideos, deleteVideo, getWatchHistory, getVideoById, uploadAvatar, formatDate } from '../utils/storage';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -10,7 +10,7 @@ const Profile = () => {
   const [tab, setTab] = useState('videos');
   const [myVideos, setMyVideos] = useState([]);
   const [historyVideos, setHistoryVideos] = useState([]);
-  const [loading, setLoading] = useState(true);
+
   const [toast, setToast] = useState(null);
   const avatarRef = useRef();
 
