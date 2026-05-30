@@ -25,12 +25,12 @@ const Saved = () => {
 
   return (
     <div className="fade-in">
-      <h1 className="section-heading" style={{ fontSize: 26, marginBottom: 28 }}>🔖 Saved Videos</h1>
+      <h1 className="section-heading" style={{ fontSize: 26, marginBottom: 28 }}> Saved Videos</h1>
       {loading ? (
         <VideoGridSkeleton count={6} />
       ) : videos.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">🔖</div>
+          <div className="empty-state-icon"></div>
           <h3>No saved videos</h3>
           <p>Save videos while watching to find them here later.</p>
         </div>
