@@ -11,7 +11,7 @@ const Footer = () => {
             <span className="footer-logo-icon">▶</span>
             <span>Stream<span>Vibe</span></span>
           </Link>
-          <p className="footer-tagline">The next generation video platform. Built for creators, powered by community.</p>
+          <p className="footer-tagline">The next generation video platform. Built for creators.</p>
         </div>
 
         <div className="footer-links-grid">
@@ -37,7 +37,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>© 2024 StreamVibe. University Group Project. Built with React.</p>
+        <p>© 2026 StreamVibe. ICT 211 Group L. Built with React.</p>
         <div className="footer-bottom-links">
           <span>Privacy Policy</span>
           <span>Terms of Service</span>
