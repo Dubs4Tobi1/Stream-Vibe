@@ -31,7 +31,6 @@ const Watch = () => {
   const hasTrackedView = useRef(false);
   const videoRef = useRef(null);
 
-  // Warn user before leaving if they have unsaved changes
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (commentText.trim()) {
@@ -44,6 +43,7 @@ const Watch = () => {
   }, [commentText]);
 
   useEffect(() => {
+    window.scrollTo(0, 0); // ← scroll to top on every video navigation
     setLoading(true);
     const load = async () => {
       const v = await getVideoById(id);
@@ -139,7 +139,7 @@ const Watch = () => {
     console.error('Video Error:', e);
     console.error('Video URL:', video?.videoUrl);
     console.error('Video error code:', videoRef.current?.error?.code);
-    
+
     let errorMsg = 'Unable to load video. ';
     if (videoRef.current?.error?.code === 4) {
       errorMsg += 'The video format is not supported.';
@@ -182,9 +182,7 @@ const Watch = () => {
   return (
     <div className="watch-page fade-in">
       <div className="watch-layout">
-        {/* Main content */}
         <div className="watch-main">
-          {/* Player */}
           <div className="video-player-wrap">
             {video.videoUrl ? (
               <>
@@ -235,7 +233,6 @@ const Watch = () => {
             )}
           </div>
 
-          {/* Video Info */}
           <div className="video-info-block">
             <h1 className="watch-title">{video.title}</h1>
 
@@ -282,7 +279,6 @@ const Watch = () => {
 
             <div className="divider" />
 
-            {/* Channel info */}
             <div className="channel-row">
               <div className="channel-avatar">
                 {video.uploaderUsername?.[0]?.toUpperCase() || 'U'}
@@ -299,7 +295,6 @@ const Watch = () => {
               </button>
             </div>
 
-            {/* Description */}
             {video.description && (
               <div className="video-description">
                 <p>{video.description}</p>
@@ -307,13 +302,11 @@ const Watch = () => {
             )}
           </div>
 
-          {/* Comments */}
           <div className="comments-section">
             <h2 className="comments-heading">
               💬 Comments <span className="comments-count">{comments.length}</span>
             </h2>
 
-            {/* Add Comment */}
             <form className="comment-form" onSubmit={handleComment}>
               <div className="comment-avatar">
                 {user ? (user.avatar
@@ -345,7 +338,6 @@ const Watch = () => {
               </div>
             </form>
 
-            {/* Comment List */}
             <div className="comments-list">
               {comments.length === 0 ? (
                 <div className="no-comments">
@@ -384,7 +376,6 @@ const Watch = () => {
           </div>
         </div>
 
-        {/* Sidebar – Related Videos */}
         <aside className="watch-sidebar">
           <h3 className="related-heading">Up Next</h3>
           <div className="related-list">
