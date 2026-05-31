@@ -29,7 +29,6 @@ const Home = () => {
     }
   }, [activeCategory, videos]);
 
-  const trending = [...videos].sort((a, b) => b.views - a.views).slice(0, 4);
   const recent = [...videos].sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)).slice(0, 8);
 
   return (
@@ -79,19 +78,6 @@ const Home = () => {
         <VideoGridSkeleton count={8} />
       ) : (
         <>
-          {activeCategory === 'All' && trending.length > 0 && (
-            <section className="home-section">
-              <h2 className="section-heading">Trending Now</h2>
-              <div className="video-grid">
-                {trending.map((video, i) => (
-                  <VideoCard key={video.id} video={video} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {activeCategory === 'All' && <div className="divider" />}
-
           <section className="home-section">
             <h2 className="section-heading">
               {activeCategory === 'All' ? 'All Videos' : `${activeCategory} Videos`}
