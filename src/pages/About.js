@@ -3,10 +3,7 @@ import './About.css';
 
 const About = () => {
   const groupMembers = [
-    { surname: 'Umah', otherNames: 'Justice ugochukwu', matric: 'LCU/UG/24/30299', department: 'Software Engineering' },
-    { surname: 'Atipo', otherNames: 'Amazinggrace Ayomide', matric: 'Lcu/Ug/24/29304', department: 'Software Engineering' },
-    { surname: 'Kalejaiye', otherNames: 'Oluwatumininu Ayomikun', matric: 'LCU/UG/24/32204', department: 'Software Engineering' },
-    { surname: 'Kassim-Ashiru', otherNames: 'Kassim Olansile', matric: 'LCU/UG/25/39600', department: 'Software Engineering' },
+    
     { surname: 'Femi-Asoro', otherNames: 'Oluwatobiloba David', matric: 'lcu/ug/24/34240', department: 'Software Engineering' },
     { surname: 'Tijani', otherNames: 'Farouq', matric: 'LCU/UG/24/32846', department: 'Software Engineering' },
     { surname: 'Chris', otherNames: 'Samuel Osahon', matric: 'LCU/UG/24/31903', department: 'Software Engineering' },
@@ -18,6 +15,11 @@ const About = () => {
     { surname: 'Tikare', otherNames: 'Ridwan Adeola', matric: 'Lcu/Ug/25/38690', department: 'Software Engineering' },
     { surname: 'Omoriba', otherNames: 'Oluwafeyisanmi Paul', matric: 'LCU/UG/24/31710', department: 'Software Engineering' },
     { surname: 'Ayodele', otherNames: 'Olanrewaju James', matric: 'LCU/UG/24/33599', department: 'Software Engineering' },
+    { surname: 'Umah', otherNames: 'Justice ugochukwu', matric: 'LCU/UG/24/30299', department: 'Software Engineering' },
+    { surname: 'Atipo', otherNames: 'Amazinggrace Ayomide', matric: 'Lcu/Ug/24/29304', department: 'Software Engineering' },
+    { surname: 'Kalejaiye', otherNames: 'Oluwatumininu Ayomikun', matric: 'LCU/UG/24/32204', department: 'Software Engineering' },
+    { surname: 'Kassim-Ashiru', otherNames: 'Kassim Olansile', matric: 'LCU/UG/25/39600', department: 'Software Engineering' },
+    
   ];
 
   return (
