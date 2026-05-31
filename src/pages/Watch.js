@@ -1,6 +1,3 @@
-// ============================================
-// StreamVibe – Watch Video Page
-// ============================================
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -196,7 +193,6 @@ const Watch = () => {
                   controls
                   autoPlay
                   className="video-player"
-                  poster={video.thumbnail || undefined}
                   onError={handleVideoError}
                   onLoadStart={() => {
                     setVideoError(null);
