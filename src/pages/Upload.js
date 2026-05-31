@@ -256,32 +256,6 @@ setVideoFile(file);              // already correct
 
           {/* Right Column – Thumbnail & Preview */}
           <div className="upload-preview-col">
-            <div className="form-group">
-              <label className="form-label">Thumbnail Image</label>
-              <div
-                className="thumb-upload-zone"
-                onClick={() => thumbInputRef.current.click()}
-              >
-                {thumbnailPreview ? (
-                  <img src={thumbnailPreview} alt="Thumbnail" className="thumb-preview" />
-                ) : (
-                  <div className="thumb-placeholder">
-                    <span>🖼</span>
-                    <p>Upload Thumbnail</p>
-                    <p className="dropzone-hint">JPG, PNG · Max 5MB</p>
-                  </div>
-                )}
-                <div className="thumb-overlay">Change</div>
-              </div>
-              <input
-                ref={thumbInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleThumbnail}
-                style={{ display: 'none' }}
-              />
-            </div>
-
             {/* Video Preview */}
             {videoPreviewUrl && (
               <div className="form-group">
@@ -299,7 +273,6 @@ setVideoFile(file);              // already correct
               <h4>Upload Tips</h4>
               <ul>
                 <li>Use a clear, descriptive title</li>
-                <li>Add a custom thumbnail for more clicks</li>
                 <li>Select the right category</li>
                 <li>Write a detailed description</li>
               </ul>
