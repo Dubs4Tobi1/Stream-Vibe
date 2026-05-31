@@ -45,6 +45,44 @@ const Upload = () => {
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
+  // Extract thumbnail from video at specified time (in seconds)
+  const extractThumbnailFromVideo = (videoFile, timeInSeconds = 1) => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      video.src = URL.createObjectURL(videoFile);
+      video.currentTime = timeInSeconds;
+
+      video.onloadedmetadata = () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+      };
+
+      video.onseeked = () => {
+        try {
+          ctx.drawImage(video, 0, 0);
+          canvas.toBlob((blob) => {
+            if (blob) {
+              // Create a File object from the blob
+              const thumbnailFile = new File([blob], 'thumbnail.jpg', { type: 'image/jpeg' });
+              const previewUrl = canvas.toDataURL('image/jpeg');
+              resolve({ file: thumbnailFile, preview: previewUrl });
+            } else {
+              reject(new Error('Failed to create thumbnail'));
+            }
+          }, 'image/jpeg', 0.9);
+        } catch (error) {
+          reject(error);
+        }
+      };
+
+      video.onerror = () => reject(new Error('Failed to load video'));
+    });
+  };
+
+  // Optional: Allow manual thumbnail override
   const handleThumbnail = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -58,16 +96,14 @@ const Upload = () => {
     }
     const reader = new FileReader();
     reader.onload = (ev) => {
-        setThumbnail(file);              // store File object
-        setThumbnailPreview(URL.createObjectURL(file));  // for display only
-
-// In handleVideo:
-setVideoFile(file);              // already correct
+      setThumbnail(file);
+      setThumbnailPreview(URL.createObjectURL(file));
+      showToast('Custom thumbnail uploaded', 'success');
     };
     reader.readAsDataURL(file);
   };
 
-  const handleVideo = (e) => {
+  const handleVideo = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     if (!file.type.startsWith('video/')) {
@@ -82,10 +118,10 @@ setVideoFile(file);              // already correct
     setVideoFile(file);
     setVideoPreviewUrl(url);
 
-    // Try to get duration
+    // Try to get duration and auto-generate thumbnail
     const vid = document.createElement('video');
     vid.src = url;
-    vid.onloadedmetadata = () => {
+    vid.onloadedmetadata = async () => {
       const sec = Math.floor(vid.duration);
       const h = Math.floor(sec / 3600);
       const m = Math.floor((sec % 3600) / 60);
@@ -94,6 +130,17 @@ setVideoFile(file);              // already correct
         ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
         : `${m}:${String(s).padStart(2,'0')}`;
       setFormData(prev => ({ ...prev, duration: dur }));
+
+      // Auto-generate thumbnail at 1 second into the video
+      try {
+        const { file: thumbFile, preview: thumbPreview } = await extractThumbnailFromVideo(file, 1);
+        setThumbnail(thumbFile);
+        setThumbnailPreview(thumbPreview);
+        showToast('Thumbnail generated from video', 'success');
+      } catch (error) {
+        console.error('Failed to generate thumbnail:', error);
+        showToast('Could not generate thumbnail from video', 'warning');
+      }
     };
   };
 
@@ -102,6 +149,8 @@ setVideoFile(file);              // already correct
     if (!formData.title.trim()) errs.title = 'Title is required';
     if (!formData.category) errs.category = 'Please select a category';
     if (!formData.channelName.trim()) errs.channelName = 'Channel name is required';
+    if (!videoFile) errs.videoFile = 'Please select a video file';
+    if (!thumbnail) errs.thumbnail = 'Thumbnail could not be generated';
     return errs;
   };
 
@@ -119,17 +168,17 @@ setVideoFile(file);              // already correct
     }
 
     const newVideo = await addVideo({
-  title: formData.title.trim(),
-  description: formData.description.trim(),
-  category: formData.category,
-  channelName: formData.channelName.trim(),
-  duration: formData.duration || '0:00',
-  thumbnailFile: thumbnail,   // pass the raw File object, not base64
-  videoFile: videoFile,
-  uploaderId: user.id,
-  uploaderUsername: user.username,
-  onProgress: setUploadProgress,
-});
+      title: formData.title.trim(),
+      description: formData.description.trim(),
+      category: formData.category,
+      channelName: formData.channelName.trim(),
+      duration: formData.duration || '0:00',
+      thumbnailFile: thumbnail,
+      videoFile: videoFile,
+      uploaderId: user.id,
+      uploaderUsername: user.username,
+      onProgress: setUploadProgress,
+    });
 
     setUploadProgress(100);
     await new Promise(r => setTimeout(r, 300));
@@ -225,7 +274,7 @@ setVideoFile(file);              // already correct
 
             {/* Video File Upload */}
             <div className="form-group">
-              <label className="form-label">Video File</label>
+              <label className="form-label">Video File *</label>
               <div
                 className="upload-dropzone"
                 onClick={() => videoInputRef.current.click()}
@@ -251,11 +300,37 @@ setVideoFile(file);              // already correct
                 onChange={handleVideo}
                 style={{ display: 'none' }}
               />
+              {errors.videoFile && <span className="form-error">{errors.videoFile}</span>}
             </div>
           </div>
 
           {/* Right Column – Thumbnail & Preview */}
           <div className="upload-preview-col">
+            {/* Thumbnail Preview */}
+            {thumbnailPreview && (
+              <div className="form-group">
+                <label className="form-label">Thumbnail Preview</label>
+                <div className="thumbnail-preview-container">
+                  <img src={thumbnailPreview} alt="Thumbnail" className="thumbnail-preview-img" />
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-secondary"
+                    onClick={() => thumbInputRef.current.click()}
+                    style={{ marginTop: '8px', width: '100%' }}
+                  >
+                    Change Thumbnail (Optional)
+                  </button>
+                </div>
+                <input
+                  ref={thumbInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleThumbnail}
+                  style={{ display: 'none' }}
+                />
+              </div>
+            )}
+
             {/* Video Preview */}
             {videoPreviewUrl && (
               <div className="form-group">
@@ -272,6 +347,7 @@ setVideoFile(file);              // already correct
             <div className="upload-tips">
               <h4>Upload Tips</h4>
               <ul>
+                <li>✓ Thumbnail auto-generated from video</li>
                 <li>Use a clear, descriptive title</li>
                 <li>Select the right category</li>
                 <li>Write a detailed description</li>
