@@ -81,7 +81,7 @@ const Home = () => {
         <>
           {activeCategory === 'All' && trending.length > 0 && (
             <section className="home-section">
-              <h2 className="section-heading">🔥 Trending Now</h2>
+              <h2 className="section-heading">Trending Now</h2>
               <div className="video-grid">
                 {trending.map((video, i) => (
                   <VideoCard key={video.id} video={video} />
@@ -94,7 +94,7 @@ const Home = () => {
 
           <section className="home-section">
             <h2 className="section-heading">
-              {activeCategory === 'All' ? '🎬 All Videos' : `${activeCategory} Videos`}
+              {activeCategory === 'All' ? 'All Videos' : `${activeCategory} Videos`}
             </h2>
 
             {filteredVideos.length === 0 ? (
