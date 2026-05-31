@@ -98,8 +98,8 @@ const About = () => {
           <div className="stat-card">
             <span className="stat-icon"></span>
             <div className="stat-info">
-              <p className="stat-label">Institution</p>
-              <p className="stat-value">LCU</p>
+              <p className="stat-label">Course</p>
+              <p className="stat-value">ICT 211</p>
             </div>
           </div>
         </div>
