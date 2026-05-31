@@ -29,10 +29,10 @@ const About = () => {
 
       <div className="about-grid">
         {[
-          { icon: '🎬', title: 'Our Mission', body: 'To empower creators of all kinds with a platform that is modern, fast, and free. We believe everyone has a story worth sharing.' },
-          { icon: '🌍', title: 'Our Vision', body: 'A world where creativity knows no barriers. StreamVibe connects creators with audiences globally, without gatekeeping.' },
-          { icon: '🔒', title: 'Privacy First', body: 'Your data stays with you. We never sell your information to advertisers. StreamVibe is built with privacy as a core principle.' },
-          { icon: '⚡', title: 'Built for Speed', body: 'Optimized for performance from day one. Fast uploads, smooth playback, and a lightning-fast interface on any device.' },
+          { icon: '', title: 'Our Mission', body: 'To empower creators of all kinds with a platform that is modern, fast, and free. We believe everyone has a story worth sharing.' },
+          { icon: '', title: 'Our Vision', body: 'A world where creativity knows no barriers. StreamVibe connects creators with audiences globally, without gatekeeping.' },
+          { icon: '', title: 'Privacy First', body: 'Your data stays with you. We never sell your information to advertisers. StreamVibe is built with privacy as a core principle.' },
+          { icon: '', title: 'Built for Speed', body: 'Optimized for performance from day one. Fast uploads, smooth playback, and a lightning-fast interface on any device.' },
         ].map(card => (
           <div key={card.title} className="about-card">
             <span className="about-card-icon">{card.icon}</span>
@@ -43,8 +43,8 @@ const About = () => {
       </div>
 
       <div className="about-team">
-        <h2>📚 University Group Project - Group L</h2>
-        <p>StreamVibe was built as a final-year university group project. It demonstrates modern React development including hooks, context, routing, localStorage/Supabase, video uploads, and responsive design.</p>
+        <h2>ICT 211 Group Project - Group L</h2>
+        <p>StreamVibe demonstrates modern React development including hooks, context, routing, localStorage/Supabase, video uploads, and responsive design.</p>
         
         <div className="about-stack">
           {['React 18', 'React Router 6', 'Supabase', 'localStorage', 'CSS Variables', 'Responsive Design'].map(t => (
@@ -94,7 +94,7 @@ const About = () => {
             </div>
           </div>
           <div className="stat-card">
-            <span className="stat-icon">🏫</span>
+            <span className="stat-icon"></span>
             <div className="stat-info">
               <p className="stat-label">Institution</p>
               <p className="stat-value">LCU</p>
