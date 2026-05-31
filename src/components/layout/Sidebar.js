@@ -12,9 +12,9 @@ const NAV_ITEMS = [
 ];
 
 const MORE_ITEMS = [
-  { to: '/about', icon: 'ℹ️', label: 'About' },
+  { to: '/about', icon: '', label: 'About' },
   { to: '/contact', icon: '', label: 'Contact' },
-  { to: '/settings', icon: '⚙️', label: 'Settings' },
+  { to: '/settings', icon: '', label: 'Settings' },
 ];
 
 const Sidebar = ({ isOpen, onClose }) => {
