@@ -93,8 +93,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         </nav>
 
         <div className="sidebar-footer">
-          <p>© 2024 StreamVibe</p>
-          <p>University Group Project</p>
+          <p>© 2026 StreamVibe</p>
+          <p>Group L ICT Project</p>
         </div>
       </aside>
     </>
