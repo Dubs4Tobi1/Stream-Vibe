@@ -19,7 +19,7 @@ const Trending = () => {
 
   return (
     <div className="fade-in">
-      <h1 className="section-heading" style={{ fontSize: 26, marginBottom: 28 }}>🔥 Trending Videos</h1>
+      <h1 className="section-heading" style={{ fontSize: 26, marginBottom: 28 }}>Trending Videos</h1>
       {loading ? <VideoGridSkeleton count={8} /> : (
         <div className="video-grid">
           {videos.map((v, i) => (
